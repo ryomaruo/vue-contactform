@@ -2,7 +2,12 @@
   <div class="input-form" :class="{ 'has-error': hasError(name) }">
     <label class="block-label">
       <p class="label-txt">{{ label }}</p>
-      <input type="text" v-model="currentVals[name]" class="input" :placeholder="placeholder">
+      <input
+        type="text"
+        class="input"
+        v-model="currentVals[name]"
+        :placeholder="placeholder"
+        @input="onInput">
       <div class="line-box">
         <div class="line"></div>
       </div>
@@ -31,26 +36,14 @@ export default {
   },
   methods: {
     ...mapActions('contactform', ['validate']),
-  },
-  mounted() {
-    this.validate(this.name);
+    onInput() {
+      this.validate(this.name);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.block-label {
-  width: 50%;
-  display: block;
-  position: relative;
-  margin: 30px auto;
-  label {
-    margin: 0 10px;
-  }
-}
-label {
-  font-size: 1em;
-}
 .input {
   width: 100%;
   margin-top: 10px;
@@ -67,12 +60,12 @@ label {
 .line-box {
   position: relative;
   width: 100%;
-  height: 2px;
+  height: 1px;
   background: #BCBCBC;
   .line {
     position: absolute;
     width: 0%;
-    height: 2px;
+    height: 1px;
     top: 0px;
     left: 50%;
     transform: translateX(-50%);
@@ -85,27 +78,4 @@ label {
   width: 100%;
 }
 
-.label-txt {
-  position: absolute;
-  top: -1em;
-  padding: 2px;
-  font-family: sans-serif;
-  font-size: .8em;
-  letter-spacing: 1px;
-  color: #b1b1b1;
-  transition: ease .3s;
-}
-
-.has-error {
-  .error-area {
-    font-size: .8em;
-  }
-  .error-area,
-  .label-txt {
-    color: #d16376;
-  }
-  .line-box {
-    background: #d16376;
-  }
-}
 </style>

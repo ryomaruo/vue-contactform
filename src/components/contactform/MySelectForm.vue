@@ -1,5 +1,5 @@
 <template>
-  <div class="select-from" :class="{ 'has-error': hasError(name) !== undefined }">
+  <div class="select-from" :class="{ 'has-error': hasError(name) }">
     <label class="block-label">
       <p class="label-txt">{{ label }}</p>
       <v-select
@@ -9,12 +9,12 @@
         item-value="val"
         single-line
       ></v-select>
+      <template v-if="hasError(name)">
+        <div class="error-area" v-for="(error, i) in errors[name]" :key="i">
+          {{ error }}
+        </div>
+      </template>
     </label>
-    <template v-if="hasError(name)">
-      <div class="error-area" v-for="(error, i) in errors[name]" :key="i">
-        {{ error }}
-      </div>
-    </template>
   </div>
 </template>
 
@@ -35,36 +35,17 @@ export default {
   methods: {
     ...mapActions('contactform', ['validate']),
   },
-  mounted() {
-    this.validate(this.name);
-  },
 };
 </script>
 
 <style scoped lang="scss">
-.v-input {
+::v-deep .v-input {
   font-size: .8rem;
-}
-.block-label {
-  width: 50%;
-  display: block;
-  position: relative;
-  margin: 30px auto;
-  label {
-    margin: 0 10px;
+  .v-text-field__details {
+    display: none;
   }
-}
-label {
-  font-size: 1em;
-}
-.label-txt {
-  position: absolute;
-  top: -1em;
-  padding: 2px;
-  font-family: sans-serif;
-  font-size: .8em;
-  letter-spacing: 1px;
-  color: #b1b1b1;
-  transition: ease .3s;
+  &.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
+      border-color: rgb(188, 188, 188);
+  }
 }
 </style>
