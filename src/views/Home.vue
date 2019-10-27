@@ -9,6 +9,9 @@
     <MySelectForm name="title" :options="options" label="どの製品について"/>
     <MyTextbox name="content" label="問い合わせ内容"/>
     <MyCheckbox name="personal_info_agreement" label="個人情報の保持することに対し同意しますか？"/>
+    <div class="btn-container">
+      <v-btn @click="handleSubmit">問い合わせ</v-btn>
+    </div>
   </div>
 </template>
 
@@ -50,5 +53,16 @@ export default {
       ],
     };
   },
+  methods: {
+    handleSubmit() {
+      this.$router.push('confirm');
+    },
+  },
 };
 </script>
+
+<style scoped lang="scss">
+.btn-container {
+  margin: 20px;
+}
+</style>

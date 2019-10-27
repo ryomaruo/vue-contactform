@@ -2,13 +2,14 @@
   <div class="select-from" :class="{ 'has-error': hasError(name) !== undefined }">
     <label class="block-label">
       <p class="label-txt">{{ label }}</p>
+      <v-select
+        v-model="currentVals.service"
+        :items="options"
+        item-text="label"
+        item-value="val"
+        single-line
+      ></v-select>
     </label>
-    <select :name="name" v-model="currentVals[name]">
-      <option value=""></option>
-      <option v-for="(option, i) in options" :key="i" :value="option.val">
-        {{ option.label }}
-      </option>
-    </select>
     <template v-if="hasError(name)">
       <div class="error-area" v-for="(error, i) in errors[name]" :key="i">
         {{ error }}
@@ -41,6 +42,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.v-input {
+  font-size: .8rem;
+}
 .block-label {
   width: 50%;
   display: block;
@@ -52,5 +56,15 @@ export default {
 }
 label {
   font-size: 1em;
+}
+.label-txt {
+  position: absolute;
+  top: -1em;
+  padding: 2px;
+  font-family: sans-serif;
+  font-size: .8em;
+  letter-spacing: 1px;
+  color: #b1b1b1;
+  transition: ease .3s;
 }
 </style>

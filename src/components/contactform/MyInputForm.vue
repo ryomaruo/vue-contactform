@@ -53,15 +53,14 @@ label {
 }
 .input {
   width: 100%;
-  padding-top: 10px;
-  font-size: 1.2em;
+  margin-top: 10px;
+  font-size: .8em;
   color: #707070;
   background: transparent;
   border: none;
   outline: none;
   &::placeholder {
     color: #d0d0d0;
-    font-size: .7em;
   }
 }
 
@@ -77,7 +76,7 @@ label {
     top: 0px;
     left: 50%;
     transform: translateX(-50%);
-    background: #8BC34A;
+    background: #1976d2;
     transition: ease .6s;
   }
 }

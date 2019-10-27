@@ -9,6 +9,7 @@ const initialState = {
     address_city: '',
     address_detail: '',
     phone_number: '',
+    service: '',
     title: '',
     content: '',
     personal_info_agreement: false,
