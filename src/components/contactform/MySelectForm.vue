@@ -8,6 +8,7 @@
         item-text="label"
         item-value="val"
         single-line
+        @change="onChange"
       ></v-select>
       <template v-if="hasError(name)">
         <div class="error-area" v-for="(error, i) in errors[name]" :key="i">
@@ -34,6 +35,9 @@ export default {
   },
   methods: {
     ...mapActions('contactform', ['validate']),
+    onChange() {
+      this.validate(this.name);
+    },
   },
 };
 </script>

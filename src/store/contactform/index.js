@@ -1,18 +1,6 @@
 const initialState = {
-  requireCols: [
-    'name',
-    'name_kana',
-    'email',
-    'service',
-    'title',
-    'content',
-  ],
-  validateFormatCols: [
-    'name_kana',
-    'email',
-    'zipcode',
-    'phone_number',
-  ],
+  requireCols: ['name', 'name_kana', 'email', 'service', 'title', 'content'],
+  validateFormatCols: ['name_kana', 'email', 'zipcode', 'phone_number'],
   currentVals: {
     name: '',
     name_kana: '',

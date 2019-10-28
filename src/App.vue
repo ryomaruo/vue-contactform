@@ -32,11 +32,14 @@ label {
   position: absolute;
   top: -1em;
   padding: 2px;
+  transition: ease .3s;
+}
+.label-txt,
+.confirm-title {
   font-family: sans-serif;
   font-size: .8em;
   letter-spacing: 1px;
   color: #b1b1b1;
-  transition: ease .3s;
 }
 
 .has-error {

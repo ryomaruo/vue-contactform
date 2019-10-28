@@ -113,7 +113,7 @@ export default {
       Object.keys(this.currentVals).forEach((col) => {
         this.validate(col);
       });
-      if (this.existError) {
+      if (this.existError || !this.currentVals.personal_info_agreement) {
         return false;
       }
       this.$router.push('confirm');
