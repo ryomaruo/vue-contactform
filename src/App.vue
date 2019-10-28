@@ -15,6 +15,10 @@
   color: #2c3e50;
 }
 
+.v-card {
+  padding: 20px;
+}
+
 .block-label {
   width: 100%;
   display: block;

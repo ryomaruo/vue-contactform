@@ -1,4 +1,8 @@
+
+import db from '../../plugins/firebase';
+
 const initialState = {
+  loading: false,
   requireCols: ['name', 'name_kana', 'email', 'service', 'title', 'content'],
   validateFormatCols: ['name_kana', 'email', 'zipcode', 'phone_number'],
   currentVals: {
@@ -58,6 +62,8 @@ const initialState = {
       require: '問い合わせ内容を入力してください。',
     },
   },
+  storeResult: '',
+  storeError: '',
 };
 
 const getters = {
@@ -136,6 +142,23 @@ const actions = {
     }
     return true;
   },
+
+  async store({ state, commit }) {
+    commit('setLoading', true);
+    const { email } = state.currentVals;
+    await db.collection('contacts').doc(email).set(state.currentVals)
+      .then(() => {
+        commit('setStoreResult', 'success');
+        console.log('Document successfully written!');
+        commit('setLoading', false);
+      })
+      .catch((error) => {
+        console.error(error);
+        commit('setLoading', false);
+        commit('setStoreResult', 'error');
+        commit('setStoreError', error);
+      });
+  },
 };
 
 const mutations = {
@@ -148,6 +171,15 @@ const mutations = {
     if (state.errors[col][type]) {
       delete state.errors[col][type];
     }
+  },
+  setLoading(state, bool) {
+    state.loading = bool;
+  },
+  setStoreResult(state, res) {
+    state.storeResult = res;
+  },
+  setStoreError(state, error) {
+    state.storeError = error;
   },
 };
 

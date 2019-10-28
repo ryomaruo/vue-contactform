@@ -2,61 +2,72 @@
   <div class="home">
     <v-container fluid>
       <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyInputForm name="name" label="姓 名" placeholder="姓 名を入力してください"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyInputForm name="name_kana" label="姓 名（かな）" placeholder="姓 名（かな）を入力してください"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyInputForm name="company_name" label="会社名" placeholder="会社名を入力してください"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyInputForm name="email" label="メールアドレス" placeholder="メールアドレスを入力してください"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <AddressForm/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyInputForm
-            name="phone_number" label="電話番号（ハイフンなし）" placeholder="電話番号（ハイフンなし）を入力してください"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MySelectForm name="service" :options="options" label="どの製品について"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyInputForm name="title" label="問い合わせ件名" placeholder="問い合わせ件名を入力してください"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <MyTextbox name="content" label="問い合わせ内容"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="10" md="10">
-          <MyCheckbox name="personal_info_agreement" label="個人情報の保持することに対し同意しますか？"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
-        <v-col cols="8" md="6">
-          <div class="btn-container">
-            <v-btn @click="handleSubmit">問い合わせ</v-btn>
-          </div>
+        <v-col cols="12" md="10">
+          <v-card
+            class="mx-auto"
+            outlined
+          >
+            <v-container fluid>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyInputForm name="name" label="姓 名" placeholder="姓 名を入力してください"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyInputForm name="name_kana" label="姓 名（かな）" placeholder="姓 名（かな）を入力してください"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyInputForm name="company_name" label="会社名" placeholder="会社名を入力してください"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyInputForm name="email" label="メールアドレス" placeholder="メールアドレスを入力してください"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <AddressForm/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyInputForm
+                    name="phone_number" label="電話番号（ハイフンなし）" placeholder="電話番号（ハイフンなし）を入力してください"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MySelectForm name="service" :options="options" label="どの製品について"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyInputForm name="title" label="問い合わせ件名" placeholder="問い合わせ件名を入力してください"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyTextbox name="content" label="問い合わせ内容"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <MyCheckbox name="personal_info_agreement" label="個人情報の保持することに対し同意しますか？"/>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="12" md="8">
+                  <div class="btn-container">
+                    <v-btn @click="handleSubmit">問い合わせ</v-btn>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -64,6 +75,7 @@
 </template>
 
 <script>
+
 import { mapState, mapGetters, mapActions } from 'vuex';
 
 import MyInputForm from '@/components/contactform/MyInputForm.vue';
