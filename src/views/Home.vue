@@ -10,22 +10,40 @@
             <v-container fluid>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyInputForm name="name" label="姓 名" placeholder="姓 名を入力してください"/>
+                  <MyInputForm type="text"
+                    name="name"
+                    label="姓 名"
+                    placeholder="姓 名を入力してください"
+                    :isRequired="true"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyInputForm name="name_kana" label="姓 名（かな）" placeholder="姓 名（かな）を入力してください"/>
+                  <MyInputForm
+                    type="text"
+                    name="name_kana"
+                    label="姓 名（かな）"
+                    placeholder="姓 名（かな）を入力してください"
+                    :isRequired="true"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyInputForm name="company_name" label="会社名" placeholder="会社名を入力してください"/>
+                  <MyInputForm
+                    type="text"
+                    name="company_name"
+                    label="会社名"
+                    placeholder="会社名を入力してください"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyInputForm name="email" label="メールアドレス" placeholder="メールアドレスを入力してください"/>
+                  <MyInputForm
+                    type="text"
+                    name="email"
+                    label="メールアドレス"
+                    placeholder="メールアドレスを入力してください"
+                    :isRequired="true"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
@@ -36,33 +54,50 @@
               <v-row justify="center">
                 <v-col cols="12" md="8">
                   <MyInputForm
-                    name="phone_number" label="電話番号（ハイフンなし）" placeholder="電話番号（ハイフンなし）を入力してください"/>
+                    type="text"
+                    name="phone_number"
+                    label="電話番号（ハイフンなし）"
+                    placeholder="電話番号（ハイフンなし）を入力してください"
+                    @oninput="onInputPhoneNum"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MySelectForm name="service" :options="options" label="どの製品について"/>
+                  <MySelectForm
+                    name="service"
+                    :options="options"
+                    label="どの製品について"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyInputForm name="title" label="問い合わせ件名" placeholder="問い合わせ件名を入力してください"/>
+                  <MyInputForm
+                    type="text"
+                    name="title"
+                    label="問い合わせ件名"
+                    placeholder="問い合わせ件名を入力してください"
+                    :isRequired="true"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyTextbox name="content" label="問い合わせ内容"/>
+                  <MyTextbox
+                    name="content"
+                    label="問い合わせ内容"
+                    :isRequired="true"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
-                  <MyCheckbox name="personal_info_agreement" label="個人情報の保持することに対し同意しますか？"/>
+                  <MyCheckbox
+                    name="personal_info_agreement"
+                    label="個人情報の保持することに対し同意しますか？"/>
                 </v-col>
               </v-row>
               <v-row justify="center">
                 <v-col cols="12" md="8">
                   <div class="btn-container">
-                    <v-btn @click="handleSubmit">問い合わせ</v-btn>
+                    <v-btn @click="handleSubmit">確認画面へ</v-btn>
                   </div>
                 </v-col>
               </v-row>
@@ -76,7 +111,9 @@
 
 <script>
 
-import { mapState, mapGetters, mapActions } from 'vuex';
+import {
+  mapState, mapGetters, mapActions, mapMutations,
+} from 'vuex';
 
 import MyInputForm from '@/components/contactform/MyInputForm.vue';
 import AddressForm from '@/components/contactform/AddressForm.vue';
@@ -121,6 +158,8 @@ export default {
   },
   methods: {
     ...mapActions('contactform', ['validate']),
+    ...mapMutations('contactform', ['setCurrentVals']),
+
     handleSubmit() {
       Object.keys(this.currentVals).forEach((col) => {
         this.validate(col);
@@ -130,6 +169,19 @@ export default {
       }
       this.$router.push('confirm');
       return true;
+    },
+
+    onInputPhoneNum(e) {
+      const { target } = e;
+      let formattedVal = target.value.replace(/[^0-9]/gi, '');
+      const isCellPhone = /^(050|070|080|090)\d+$/.test(formattedVal);
+      if (isCellPhone) {
+        formattedVal = formattedVal.slice(0, 11);
+      } else {
+        formattedVal = formattedVal.slice(0, 10);
+      }
+      this.setCurrentVals({ phone_number: formattedVal });
+      target.value = formattedVal;
     },
   },
 };

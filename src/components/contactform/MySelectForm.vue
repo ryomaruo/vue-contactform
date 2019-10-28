@@ -50,6 +50,13 @@ export default {
   }
   &.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
       border-color: rgb(188, 188, 188);
+      transition: ease .6s;
+  }
+}
+.has-error {
+  ::v-deep .v-input.theme--light.v-text-field > .v-input__control > .v-input__slot:before {
+    border-color: #d16376;
+    width: 100%;
   }
 }
 </style>

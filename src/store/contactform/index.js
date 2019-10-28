@@ -105,17 +105,19 @@ const actions = {
   },
 
   validateFormat({ state, commit }, col) {
-    if (['zipcode', 'phone_number'].includes(col) && !state.currentVals[col]) {
-      commit('removeError', {
-        col,
-        type: 'format',
-      });
+    if (['zipcode', 'phone_number'].includes(col)) {
+      if (!state.currentVals[col] === '') {
+        commit('removeError', {
+          col,
+          type: 'format',
+        });
+      }
       return true;
     }
     let regex;
     switch (col) {
       case 'name_kana':
-        regex = /[\u{3000}-\u{301C}\u{3041}-\u{3093}\u{309B}-\u{309E}]/mu;
+        regex = /^[ぁ-ん\s]+$/;
         break;
       case 'email':
         regex = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/;
@@ -162,6 +164,9 @@ const actions = {
 };
 
 const mutations = {
+  setCurrentVals(state, currentVals) {
+    state.currentVals = Object.assign({}, state.currentVals, currentVals);
+  },
   setError(state, { col, type }) {
     const { errors } = state;
     errors[col][type] = state.errorMsgs[col][type];

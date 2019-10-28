@@ -31,6 +31,9 @@
 label {
   font-size: 1em;
 }
+.required {
+  color: #d16376;
+}
 
 .label-txt {
   position: absolute;

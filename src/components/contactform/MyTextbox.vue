@@ -8,7 +8,11 @@
       rows="1"
       row-height="15"
       @input="onInput"
-    ></v-textarea>
+    >
+      <template v-if="isRequired" v-slot:label>
+        {{ label }}<span  class="required"> ※必須</span>
+      </template>
+    </v-textarea>
     <template v-if="hasError(name)">
       <div class="error-area" v-for="(error, i) in errors[name]" :key="i">
         {{ error }}
@@ -25,6 +29,10 @@ export default {
   props: {
     name: String,
     label: String,
+    isRequired: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -55,6 +63,14 @@ export default {
   }
   .theme--light.v-label {
     color: #d0d0d0;
+  }
+  .theme--light.v-text-field--outlined fieldset {
+    transition: ease .6s;
+  }
+}
+.has-error {
+  ::v-deep .theme--light.v-text-field--outlined fieldset {
+    border-color: #d16376;
   }
 }
 </style>
