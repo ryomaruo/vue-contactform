@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <v-app id="app">
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <style lang="scss">
@@ -14,11 +14,51 @@
   text-align: center;
   color: #2c3e50;
 }
-.p {
+
+.v-card {
+  padding: 20px;
+}
+
+.block-label {
+  width: 100%;
   display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  position: relative;
+  margin: 15px auto;
+  label {
+    margin: 0 10px;
+  }
+}
+label {
+  font-size: 1em;
+}
+.required {
+  color: #d16376;
+}
+
+.label-txt {
+  position: absolute;
+  top: -1em;
+  padding: 2px;
+  transition: ease .3s;
+}
+.label-txt,
+.confirm-title {
+  font-family: sans-serif;
+  font-size: .8em;
+  letter-spacing: 1px;
+  color: #b1b1b1;
+}
+
+.has-error {
+  .error-area {
+    font-size: .8em;
+  }
+  .error-area,
+  .label-txt {
+    color: #d16376;
+  }
+  .line-box {
+    background: #d16376;
+  }
 }
 </style>

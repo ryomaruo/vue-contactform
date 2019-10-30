@@ -21,4 +21,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+::v-deep label {
+  font-size: .8em;
+}
+::v-deep .pretty {
+  line-height: .8em;
+}
 </style>

@@ -1,8 +1,16 @@
 <template>
   <div class="input-form" :class="{ 'has-error': hasError(name) }">
     <label class="block-label">
-      <p class="label-txt">{{ label }}</p>
-      <input type="text" v-model="currentVals[name]" class="input" :placeholder="placeholder">
+      <p class="label-txt">
+        {{ label }}
+        <span v-if="isRequired" class="required"> ※必須</span>
+      </p>
+      <input
+        :type="type"
+        class="input"
+        v-model="currentVals[name]"
+        :placeholder="placeholder"
+        @input="onInput">
       <div class="line-box">
         <div class="line"></div>
       </div>
@@ -21,9 +29,17 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 export default {
   name: 'MyInputForm',
   props: {
+    type: {
+      type: String,
+      default: 'text',
+    },
     name: String,
     label: String,
     placeholder: String,
+    isRequired: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapState('contactform', ['currentVals', 'errors']),
@@ -31,82 +47,63 @@ export default {
   },
   methods: {
     ...mapActions('contactform', ['validate']),
-  },
-  mounted() {
-    this.validate(this.name);
+
+    onInput(e) {
+      this.validate(this.name);
+      this.$emit('oninput', e);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-.block-label {
-  width: 50%;
-  display: block;
-  position: relative;
-  margin: 30px auto;
-  label {
-    margin: 0 10px;
-  }
-}
-label {
-  font-size: 1em;
-}
 .input {
   width: 100%;
-  padding-top: 10px;
-  font-size: 1.2em;
+  margin-top: 10px;
+  font-size: .8em;
   color: #707070;
   background: transparent;
   border: none;
   outline: none;
   &::placeholder {
     color: #d0d0d0;
-    font-size: .7em;
   }
 }
 
 .line-box {
   position: relative;
   width: 100%;
-  height: 2px;
+  height: 1px;
   background: #BCBCBC;
   .line {
     position: absolute;
     width: 0%;
-    height: 2px;
+    height: 1px;
     top: 0px;
     left: 50%;
     transform: translateX(-50%);
-    background: #8BC34A;
+    background: #1976d2;
     transition: ease .6s;
+  }
+}
+
+.has-error {
+  .line {
+    width: 100%;
+    background: #d16376;
   }
 }
 
 .input:focus + .line-box .line {
   width: 100%;
 }
-
-.label-txt {
-  position: absolute;
-  top: -1em;
-  padding: 2px;
-  font-family: sans-serif;
-  font-size: .8em;
-  letter-spacing: 1px;
-  color: #b1b1b1;
-  transition: ease .3s;
+// type=numberのすスピンボタン非表示
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
-
-.has-error {
-  .error-area {
-    font-size: .8em;
-  }
-  .error-area,
-  .label-txt {
-    color: #d16376;
-  }
-  .line-box {
-    background: #d16376;
-  }
+input[type="number"] {
+    -moz-appearance:textfield;
 }
 </style>

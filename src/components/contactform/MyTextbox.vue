@@ -1,17 +1,23 @@
 <template>
   <div class="textbox" :class="{ 'has-error': hasError(name) }">
-    <label class="block-label">
-      <p class="label-txt">{{ label }}</p>
-      <textarea :v-model="currentVals[name]" class="input"></textarea>
-      <div class="line-box">
-      <div class="line"></div>
-      </div>
-      <template v-if="hasError(name)">
-        <div class="error-area" v-for="(error, i) in errors['name']" :key="i">
-          {{ error }}
-        </div>
+    <v-textarea
+      v-model="currentVals.content"
+      :label="label"
+      auto-grow
+      outlined
+      rows="1"
+      row-height="15"
+      @input="onInput"
+    >
+      <template v-if="isRequired" v-slot:label>
+        {{ label }}<span  class="required"> ※必須</span>
       </template>
-    </label>
+    </v-textarea>
+    <template v-if="hasError(name)">
+      <div class="error-area" v-for="(error, i) in errors[name]" :key="i">
+        {{ error }}
+      </div>
+    </template>
   </div>
 </template>
 
@@ -23,6 +29,15 @@ export default {
   props: {
     name: String,
     label: String,
+    isRequired: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      error: [],
+    };
   },
   computed: {
     ...mapState('contactform', ['currentVals', 'errors']),
@@ -30,12 +45,32 @@ export default {
   },
   methods: {
     ...mapActions('contactform', ['validate']),
-  },
-  mounted() {
-    this.validate(this.name);
+    onInput() {
+      this.validate(this.name);
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
+::v-deep .v-textarea {
+  .v-label,
+  textarea {
+    font-size: 0.8em;
+  }
+  .v-text-field__details {
+    display: none;
+  }
+  .theme--light.v-label {
+    color: #d0d0d0;
+  }
+  .theme--light.v-text-field--outlined fieldset {
+    transition: ease .6s;
+  }
+}
+.has-error {
+  ::v-deep .theme--light.v-text-field--outlined fieldset {
+    border-color: #d16376;
+  }
+}
 </style>

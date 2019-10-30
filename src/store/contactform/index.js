@@ -1,4 +1,10 @@
+
+import db from '../../plugins/firebase';
+
 const initialState = {
+  loading: false,
+  requireCols: ['name', 'name_kana', 'email', 'service', 'title', 'content'],
+  validateFormatCols: ['name_kana', 'email', 'zipcode', 'phone_number'],
   currentVals: {
     name: '',
     name_kana: '',
@@ -9,42 +15,45 @@ const initialState = {
     address_city: '',
     address_detail: '',
     phone_number: '',
+    service: '',
     title: '',
     content: '',
     personal_info_agreement: false,
   },
-  errors: {},
+  errors: {
+    name: {},
+    name_kana: {},
+    company_name: {},
+    email: {},
+    zipcode: {},
+    address_prefecture: {},
+    address_city: {},
+    address_detail: {},
+    phone_number: {},
+    service: {},
+    title: {},
+    content: {},
+  },
   errorMsgs: {
     name: {
-      require: '氏名（漢字）を入力してください。',
+      require: '姓 名を入力してください。',
     },
     name_kana: {
-      require: '氏名（かな）を入力してください。',
-      format: '氏名（かな）はひらがなで入力してください。',
-    },
-    company_name: {
-      require: '会社名を入力してください。',
+      require: '姓 名（かな）を入力してください。',
+      format: '姓 名（かな）はひらがなで入力してください。',
     },
     email: {
       require: 'メールアドレスを入力してください。',
       format: 'メールアドレスの形式が正しくありません。',
     },
     zipcode: {
-      require: '郵便番号を入力してください。',
       format: '郵便番号の形式が正しくありません。',
     },
-    address_prefecture: {
-      require: '住所（都道府県）を選択してください。',
-    },
-    address_city: {
-      require: '住所（市区町村）を入力してください。',
-    },
-    address_detail: {
-      require: '住所を入力してください。',
-    },
     phone_number: {
-      require: '電話番号を入力してください。',
       format: '電話番号の形式が正しくありません。',
+    },
+    service: {
+      require: 'どの製品についてか選択してください。',
     },
     title: {
       require: '問い合わせ件名を入力してください。',
@@ -53,42 +62,129 @@ const initialState = {
       require: '問い合わせ内容を入力してください。',
     },
   },
+  storeResult: '',
+  storeError: '',
 };
 
 const getters = {
-  hasError: state => name => state.errors[name] !== undefined,
+  hasError: state => name => Object.keys(state.errors[name]).length > 0,
+
+  existError: (state) => {
+    let existError = false;
+    Object.keys(state.errors).forEach((col) => {
+      if (Object.keys(state.errors[col]).length > 0) {
+        existError = true;
+      }
+    });
+    return existError;
+  },
 };
 
 const actions = {
-  validate({ state, commit }, col) {
+  validate({ state, dispatch }, col) {
+    if (state.requireCols.includes(col)) {
+      dispatch('validateRequire', col);
+    }
+    if (state.validateFormatCols.includes(col)) {
+      dispatch('validateFormat', col);
+    }
+  },
+
+  validateRequire({ state, commit }, col) {
+    if (!state.currentVals[col]) {
+      commit('setError', {
+        col,
+        type: 'require',
+      });
+    } else {
+      commit('removeError', {
+        col,
+        type: 'require',
+      });
+    }
+  },
+
+  validateFormat({ state, commit }, col) {
+    if (['zipcode', 'phone_number'].includes(col)) {
+      if (!state.currentVals[col] === '') {
+        commit('removeError', {
+          col,
+          type: 'format',
+        });
+      }
+      return true;
+    }
+    let regex;
     switch (col) {
-      case 'name':
-        if (!state.name) {
-          commit('setError', {
-            col: 'name',
-            type: 'require',
-          });
-        }
-        break;
       case 'name_kana':
-        break;
-      case 'company_name':
+        regex = /^[ぁ-ん\s]+$/;
         break;
       case 'email':
+        regex = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}\.[A-Za-z0-9]{1,}$/;
         break;
-      case 'title':
+      case 'zipcode':
+        regex = /^[0-9]{7}$/;
         break;
-      case 'content':
+      case 'phone_number':
+        regex = /^(050|070|080|090)\d{8}$|^0\d{9}$/;
         break;
       default:
         break;
     }
+    if (!state.currentVals[col].match(regex)) {
+      commit('setError', {
+        col,
+        type: 'format',
+      });
+    } else {
+      commit('removeError', {
+        col,
+        type: 'format',
+      });
+    }
+    return true;
+  },
+
+  async store({ state, commit }) {
+    commit('setLoading', true);
+    const { email } = state.currentVals;
+    await db.collection('contacts').doc(email).set(state.currentVals)
+      .then(() => {
+        commit('setStoreResult', 'success');
+        console.log('Document successfully written!');
+        commit('setLoading', false);
+      })
+      .catch((error) => {
+        console.error(error);
+        commit('setLoading', false);
+        commit('setStoreResult', 'error');
+        commit('setStoreError', error);
+      });
   },
 };
 
 const mutations = {
+  setCurrentVals(state, currentVals) {
+    state.currentVals = Object.assign({}, state.currentVals, currentVals);
+  },
   setError(state, { col, type }) {
-    state.errors = state.errorMsgs[col][type];
+    const { errors } = state;
+    errors[col][type] = state.errorMsgs[col][type];
+    state.errors = Object.assign({}, state.errors, errors);
+  },
+  removeError(state, { col, type }) {
+    if (state.errors[col][type]) {
+      delete state.errors[col][type];
+    }
+  },
+  setLoading(state, bool) {
+    state.loading = bool;
+  },
+  setStoreResult(state, res) {
+    state.storeResult = res;
+  },
+  setStoreError(state, error) {
+    state.storeError = error;
   },
 };
 
