@@ -13,7 +13,7 @@
     "axios-jsonp": "^1.0.2",
     "core-js": "^3.3.2",
     "firebase": "^7.2.2",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.0",
     "pretty-checkbox-vue": "^1.1.9",
     "sass": "^1.23.1",
     "vue": "^2.6.10",
